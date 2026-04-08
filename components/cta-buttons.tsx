@@ -15,12 +15,12 @@ export function CTAButtons({ youtubeUrl, streamingUrl }: Props) {
   }
 
   return (
-    <div className="flex flex-wrap gap-3">
+    <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap">
       {youtubeUrl ? (
         <Link
           href={youtubeUrl}
           target="_blank"
-          className="rounded-full bg-zinc-100 px-5 py-2 text-sm text-zinc-900 transition hover:bg-white"
+          className="w-full rounded-full bg-zinc-100 px-5 py-2.5 text-center text-sm text-zinc-900 transition hover:bg-white sm:w-auto"
         >
           映像で見る
         </Link>
@@ -29,7 +29,7 @@ export function CTAButtons({ youtubeUrl, streamingUrl }: Props) {
         <Link
           href={streamingUrl}
           target="_blank"
-          className="rounded-full border border-zinc-700 px-5 py-2 text-sm text-zinc-100 transition hover:border-zinc-500"
+          className="w-full rounded-full border border-zinc-700 px-5 py-2.5 text-center text-sm text-zinc-100 transition hover:border-zinc-500 sm:w-auto"
         >
           配信で聴く
         </Link>

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import Image from "next/image";
 import { CTAButtons } from "@/components/cta-buttons";
 import { MdxContent } from "@/components/mdx-content";
@@ -24,6 +23,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!post) {
     return {};
   }
+  const song = getSongBySlug(post.songSlug);
+  const ogImage = post.coverImage || song?.coverImage;
 
   return {
     title: post.title,
@@ -31,7 +32,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: post.title,
       description: post.description,
-      images: post.coverImage ? [{ url: post.coverImage }] : undefined,
+      images: ogImage ? [{ url: ogImage }] : undefined,
       type: "article",
     },
   };
@@ -47,13 +48,15 @@ export default async function PostDetailPage({ params }: Props) {
   const song = getSongBySlug(post.songSlug);
   const relatedPosts = getRelatedPosts(post.slug, post.songSlug);
   const visualImage = post.coverImage || song?.coverImage;
+  const youtubeUrl = song?.youtubeUrl ?? post.youtubeUrl;
+  const streamingUrl = song?.streamingUrl ?? post.streamingUrl;
 
   return (
-    <article className="mx-auto max-w-3xl space-y-10">
+    <article className="mx-auto max-w-3xl space-y-8 sm:space-y-10">
       <header className="space-y-4">
         <p className="text-xs text-zinc-400">{formatDate(post.date)}</p>
-        <h1 className="text-3xl leading-tight text-zinc-100 md:text-4xl">{post.title}</h1>
-        <p className="text-base leading-8 text-zinc-300">{post.description}</p>
+        <h1 className="text-2xl leading-tight text-zinc-100 sm:text-3xl md:text-4xl">{post.title}</h1>
+        <p className="text-sm leading-7 text-zinc-300 sm:text-base sm:leading-8">{post.description}</p>
         <div className="flex flex-wrap gap-2 text-xs text-zinc-400">
           {post.tags.map((tag) => (
             <span key={tag} className="rounded-full border border-zinc-700 px-2 py-1">
@@ -76,25 +79,17 @@ export default async function PostDetailPage({ params }: Props) {
         </section>
       ) : null}
 
-      {song ? (
-        <section className="rounded-2xl border border-white/10 bg-zinc-900/40 p-6">
-          <p className="text-xs text-zinc-400">関連楽曲</p>
-          <h2 className="mt-2 text-2xl text-zinc-100">{song.title}</h2>
-          <p className="mt-3 text-sm leading-7 text-zinc-300">{song.description}</p>
-          <div className="mt-4">
-            <Link href={`/songs/${song.slug}`} className="text-sm text-zinc-300 hover:text-white">
-              楽曲ページへ
-            </Link>
-          </div>
-        </section>
-      ) : null}
+      <section className="space-y-4 rounded-2xl border border-white/10 p-4 sm:p-6">
+        <h2 className="text-xl text-zinc-100">この楽曲をもっと深く</h2>
+        <CTAButtons youtubeUrl={youtubeUrl} streamingUrl={streamingUrl} />
+      </section>
 
-      <YoutubeEmbed url={post.youtubeUrl} title={`${post.title} MV`} />
+      <YoutubeEmbed url={youtubeUrl} title={`${post.title} MV`} />
       <MdxContent source={post.content} />
 
-      <section className="space-y-4 rounded-2xl border border-white/10 p-6">
+      <section className="space-y-4 rounded-2xl border border-white/10 p-4 sm:p-6">
         <h2 className="text-xl text-zinc-100">この楽曲をもっと深く</h2>
-        <CTAButtons youtubeUrl={post.youtubeUrl} streamingUrl={post.streamingUrl} />
+        <CTAButtons youtubeUrl={youtubeUrl} streamingUrl={streamingUrl} />
       </section>
 
       <section className="space-y-4">

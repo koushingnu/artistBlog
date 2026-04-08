@@ -44,14 +44,14 @@ export default async function SongDetailPage({ params }: Props) {
 
   return (
     <div className="mx-auto max-w-4xl space-y-8">
-      <section className="rounded-2xl border border-white/10 bg-zinc-900/40 p-6 md:p-8">
+      <section className="rounded-2xl border border-white/10 bg-zinc-900/40 p-4 sm:p-6 md:p-8">
         <div className="grid gap-6 md:grid-cols-[220px_1fr]">
           <div className="aspect-square overflow-hidden rounded-xl bg-zinc-800">
             <Image src={song.coverImage} alt={song.title} width={640} height={640} className="h-full w-full object-cover" />
           </div>
           <div className="space-y-4">
-            <h1 className="text-3xl text-zinc-100">{song.title}</h1>
-            <p className="text-sm leading-8 text-zinc-300">{song.description}</p>
+            <h1 className="text-2xl text-zinc-100 sm:text-3xl">{song.title}</h1>
+            <p className="text-sm leading-7 text-zinc-300 sm:leading-8">{song.description}</p>
             <CTAButtons youtubeUrl={song.youtubeUrl} streamingUrl={song.streamingUrl} />
           </div>
         </div>
